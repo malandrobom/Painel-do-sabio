@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090707">
+<title>PAINEL DO SÁBIO</title>
+
+<style>
+:root {
+    --fundo: #090707;
+    --painel: #151010;
+    --borda: #382020;
+    --vermelho: #d83232;
+    --texto: #eeeeee;
+    --cinza: #999090;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 14px;
+    min-height: 100vh;
+    background: radial-gradient(
+        ellipse at top left,
+        #281010 0%,
+        #100909 40%,
+        #080808 80%
+    );
+    color: var(--texto);
+    font-family: Consolas, "Courier New", monospace;
+}
+
+.container {
+    max-width: 760px;
+    margin: 20px auto;
+}
+
+.topo {
+    padding: 20px 12px;
+    margin-bottom: 22px;
+    border-bottom: 2px solid #a82020;
+    background: linear-gradient(
+        90deg,
+        rgba(110, 15, 15, 0.22),
+        transparent 75%
+    );
+}
+
+.marca {
+    color: var(--vermelho);
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+h1 {
+    margin: 12px 0;
+    font-size: clamp(25px, 6vw, 38px);
+    letter-spacing: 2px;
+}
+
+.subtitulo {
+    color: var(--cinza);
+    font-size: 11px;
+    line-height: 1.8;
+}
+
+.status {
+    margin-top: 18px;
+    color: #c8c0c0;
+    font-size: 12px;
+}
+
+.ponto,
+.titulo-secao,
+.numero,
+#moduloAtual {
+    color: var(--vermelho);
+}
+
+.painel {
+    padding: 20px;
+    margin-bottom: 18px;
+    background: linear-gradient(
+        135deg,
+        #1b1111,
+        #100d0d 55%,
+        #0b0b0b
+    );
+    border: 1px solid var(--borda);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.25);
+}
+
+.titulo-secao {
+    margin: 0 0 18px;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    padding: 13px 12px;
+    margin: 8px 0;
+    background: linear-gradient(90deg, #211010, #100c0c);
+    border-left: 3px solid #6f2020;
+    font-size: 14px;
+}
+
+.numero {
+    display: inline-block;
+    width: 38px;
+    font-weight: bold;
+}
+
+label {
+    display: block;
+    margin: 20px 0 9px;
+    color: #d0c6c6;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #090707;
+    border: 1px solid #452323;
+    border-radius: 0;
+    outline: none;
+    color: #f5eeee;
+    font: inherit;
+    font-size: 14px;
+}
+
+input:focus {
+    border-color: var(--vermelho);
+    box-shadow: 0 0 8px rgba(216, 50, 50, 0.15);
+}
+
+input:disabled {
+    opacity: 0.5;
+}
+
+button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    background: linear-gradient(90deg, #591313, #8e2020, #591313);
+    border: 1px solid #a82c2c;
+    color: white;
+    font: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #7b1919, #b52a2a, #7b1919);
+}
+
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+#resultado {
+    min-height: 75px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.8;
+    font-size: 12px;
+    color: #e0dada;
+}
+
+.erro {
+    color: #ff6868 !important;
+}
+
+.aviso {
+    margin-top: 15px;
+    color: #bba6a6;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.rodape {
+    padding: 18px 8px;
+    border-top: 1px solid var(--borda);
+    color: #786666;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.8;
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        margin: 10px auto;
+    }
+
+    .painel {
+        padding: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <header class="topo">
+        <div class="marca">PS-01 // SISTEMA DE CONSULTA</div>
+        <h1>PAINEL DO SÁBIO</h1>
+        <div class="subtitulo">
+            TERMINAL DE PESQUISA<br>
+            INTELIGÊNCIA DE FONTES ABERTAS
+        </div>
+        <div class="status">
+            <span class="ponto">●</span> INTERFACE INICIALIZADA
+        </div>
+    </header>
+
+    <section class="painel">
+        <h2 class="titulo-secao">01 // SELECIONE O MÓDULO</h2>
+
+        <ul class="menu">
+            <li><span class="numero">[1]</span> CPF</li>
+            <li><span class="numero">[2]</span> CNPJ</li>
+            <li><span class="numero">[3]</span> E-MAIL</li>
+            <li><span class="numero">[4]</span> TELEFONE</li>
+            <li><span class="numero">[5]</span> IP</li>
+        </ul>
+
+        <label for="opcao">DIGITE O NÚMERO DO MÓDULO</label>
+        <input
+            id="opcao"
+            type="number"
+            min="1"
+            max="5"
+            placeholder="Digite um número de 1 a 5"
+            onkeydown="if(event.key==='Enter') escolherOpcao()"
+        >
+
+        <button type="button" onclick="escolherOpcao()">
+            CONFIRMAR MÓDULO
+        </button>
+    </section>
+
+    <section class="painel">
+        <h2 class="titulo-secao">02 // ENTRADA DE DADOS</h2>
+
+        <p>
+            MÓDULO ATIVO:
+            <span id="moduloAtual">NENHUM</span>
+        </p>
+
+        <label id="rotulo" for="valor">
+            SELECIONE UM MÓDULO ACIMA
+        </label>
+
+        <input
+            id="valor"
+            type="text"
+            placeholder="Aguardando seleção..."
+            autocomplete="off"
+            disabled
+            onkeydown="if(event.key==='Enter') consultar()"
+        >
+
+        <button
+            id="botaoConsultar"
+            type="button"
+            onclick="consultar()"
+            disabled
+        >
+            EXECUTAR CONSULTA
+        </button>
+    </section>
+
+    <section class="painel">
+        <h2 class="titulo-secao">03 // SAÍDA DO SISTEMA</h2>
+        <div id="resultado">Aguardando operação...</div>
+        <div class="aviso">
+            As consultas externas dependem da disponibilidade dos serviços.
+            A localização por IP é aproximada.
+        </div>
+    </section>
+
+    <footer class="rodape">
+        PAINEL DO SÁBIO // PS-01<br>
+        INTERFACE DE CONSULTA LOCAL
+    </footer>
+
+</div>
+
+<script>
+"use strict";
+
+let tipoSelecionado = "";
+
+const campos = {
+    cpf: {
+        nome: "CPF",
+        rotulo: "DIGITE O CPF",
+        placeholder: "CPF com ou sem pontuação"
+    },
+    cnpj: {
+        nome: "CNPJ",
+        rotulo: "DIGITE O CNPJ",
+        placeholder: "Digite o CNPJ"
+    },
+    email: {
+        nome: "E-MAIL",
+        rotulo: "DIGITE O E-MAIL",
+        placeholder: "nome@exemplo.com"
+    },
+    telefone: {
+        nome: "TELEFONE",
+        rotulo: "DIGITE O TELEFONE",
+        placeholder: "DDD + número"
+    },
+    ip: {
+        nome: "IP",
+        rotulo: "DIGITE O ENDEREÇO IP",
+        placeholder: "Ex.: 8.8.8.8"
+    }
+};
+
+function mostrar(mensagem, erro = false) {
+    const resultado = document.getElementById("resultado");
+    resultado.className = erro ? "erro" : "";
+    resultado.textContent = "> " + mensagem;
+}
+
+function escolherOpcao() {
+    const opcao = document.getElementById("opcao").value.trim();
+
+    const mapa = {
+        "1": "cpf",
+        "2": "cnpj",
+        "3": "email",
+        "4": "telefone",
+        "5": "ip"
+    };
+
+    if (!mapa[opcao]) {
+        mostrar("Digite um número entre 1 e 5.", true);
+        return;
+    }
+
+    tipoSelecionado = mapa[opcao];
+
+    const campo = campos[tipoSelecionado];
+    const valor = document.getElementById("valor");
+
+    document.getElementById("moduloAtual").textContent = campo.nome;
+    document.getElementById("rotulo").textContent = campo.rotulo;
+
+    valor.placeholder = campo.placeholder;
+    valor.value = "";
+    valor.disabled = false;
+
+    document.getElementById("botaoConsultar").disabled = false;
+
+    mostrar("Módulo " + campo.nome + " selecionado. Aguardando entrada.");
+    valor.focus();
+}
+
+async function consultar() {
+    if (!tipoSelecionado) {
+        mostrar("Selecione um módulo primeiro.", true);
+        return;
+    }
+
+    const valor = document.getElementById("valor").value.trim();
+
+    if (!valor) {
+        mostrar("Digite um valor para consultar.", true);
+        return;
+    }
+
+    const botao = document.getElementById("botaoConsultar");
+    botao.disabled = true;
+    botao.textContent = "PROCESSANDO...";
+
+    try {
+        if (tipoSelecionado === "cnpj") {
+            await consultarCNPJ(valor);
+        } else if (tipoSelecionado === "ip") {
+            await consultarIP(valor);
+        } else if (tipoSelecionado === "email") {
+            await consultarEmail(valor);
+        } else if (tipoSelecionado === "cpf") {
+            validarCPFFormato(valor);
+        } else if (tipoSelecionado === "telefone") {
+            validarTelefoneFormato(valor);
+        }
+    } catch (erro) {
+        mostrar("FALHA: " + erro.message, true);
+    } finally {
+        botao.disabled = false;
+        botao.textContent = "EXECUTAR CONSULTA";
+    }
+}
+
+async function consultarCNPJ(valor) {
+    const cnpj = valor.replace(/\D/g, "");
+
+    if (cnpj.length !== 14) {
+        throw new Error("O CNPJ deve conter 14 números.");
+    }
+
+    mostrar("Consultando cadastro público...");
+
+    const resposta = await fetch(
+        "https://brasilapi.com.br/api/cnpj/v1/" +
+        encodeURIComponent(cnpj)
+    );
+
+    if (!resposta.ok) {
+        throw new Error(
+            resposta.status === 404
+                ? "CNPJ não encontrado."
+                : "Serviço indisponível. Tente novamente."
+        );
+    }
+
+    const dados = await resposta.json();
+
+    mostrar(
+        "CONSULTA CONCLUÍDA\n\n" +
+        "RAZÃO SOCIAL: " + (dados.razao_social || "Não informado") + "\n" +
+        "NOME FANTASIA: " + (dados.nome_fantasia || "Não informado") + "\n" +
+        "CNPJ: " + (dados.cnpj || cnpj) + "\n" +
+        "SITUAÇÃO: " +
+        (dados.descricao_situacao_cadastral || "Não informado") + "\n" +
+        "MUNICÍPIO: " + (dados.municipio || "Não informado") + "\n" +
+        "UF: " + (dados.uf || "Não informado")
+    );
+}
+
+async function consultarIP(valor) {
+    const resposta = await fetch(
+        "https://ipapi.co/" +
+        encodeURIComponent(valor) +
+        "/json/"
+    );
+
+    if (!resposta.ok) {
+        throw new Error("Não foi possível consultar esse IP.");
+    }
+
+    const dados = await resposta.json();
+
+    if (dados.error) {
+        throw new Error(dados.reason || "IP inválido ou indisponível.");
+    }
+
+    mostrar(
+        "CONSULTA CONCLUÍDA\n\n" +
+        "IP: " + (dados.ip || valor) + "\n" +
+        "PROVEDOR / REDE: " + (dados.org || "Não informado") + "\n" +
+        "CIDADE: " + (dados.city || "Não informado") + "\n" +
+        "REGIÃO: " + (dados.region || "Não informado") + "\n" +
+        "PAÍS: " + (dados.country_name || "Não informado") + "\n\n" +
+        "A localização por IP é aproximada."
+    );
+}
+
+async function consultarEmail(valor) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
+        throw new Error("Digite um e-mail válido.");
+    }
+
+    mostrar("Consultando serviço de vazamentos...");
+
+    const resposta = await fetch(
+        "http://127.0.0.1:5000/api/email?email=" +
+        encodeURIComponent(valor)
+    );
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+        throw new Error(
+            dados.erro || "Falha na consulta de e-mail."
+        );
+    }
+
+    if (dados.encontrado) {
+        const lista = (dados.vazamentos || []).map(item =>
+            "- " + (item.nome || "Serviço não identificado") +
+            " | Data: " + (item.data || "Não informada")
+        ).join("\n");
+
+        mostrar(
+            "VAZAMENTOS ENCONTRADOS\n\n" +
+            "E-MAIL: " + dados.email + "\n" +
+            "QUANTIDADE: " + dados.quantidade + "\n\n" +
+            (lista || "Nenhum detalhe disponível.")
+        );
+    } else {
+        mostrar(
+            "CONSULTA CONCLUÍDA\n\n" +
+            "E-MAIL: " + dados.email + "\n" +
+            (dados.mensagem || "Nenhum vazamento encontrado nesta consulta.")
+        );
+    }
+}
+
+function validarCPFFormato(valor) {
+    const cpf = valor.replace(/\D/g, "");
+
+    if (!/^\d{11}$/.test(cpf)) {
+        throw new Error("O CPF deve conter 11 números.");
+    }
+
+    mostrar(
+        "FORMATO DO CPF ACEITO.\n\n" +
+        "Esta função verifica apenas a quantidade de dígitos. " +
+        "Não consulta identidade ou dados pessoais."
+    );
+}
+
+function validarTelefoneFormato(valor) {
+    const telefone = valor.replace(/\D/g, "");
+
+    if (telefone.length < 10 || telefone.length > 13) {
+        throw new Error("Verifique o DDD e a quantidade de números.");
+    }
+
+    mostrar(
+        "FORMATO DO TELEFONE ACEITO.\n\n" +
+        "Esta função valida apenas o formato. " +
+        "Não identifica o titular nem acessa mensagens ou WhatsApp."
+    );
+}
+</script>
+</body>
+</html>
